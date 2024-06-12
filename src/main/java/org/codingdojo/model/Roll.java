@@ -13,24 +13,18 @@ public record Roll(Dice[] dices) {
     }
 
     public int score(CategoryEnum category) {
-        int score;
+        int score = 0;
         switch (category) {
-            case CHANCE -> score = YatzyRules.chance(this);
-            case YATZY -> score = YatzyRules.yatzy(this);
-            case ONES -> score = YatzyRules.ones(this);
-            case TWOS -> score = YatzyRules.twos(this);
-            case THREES -> score = YatzyRules.threes(this);
-            case FOURS -> score = YatzyRules.fours(this);
-            case FIVES -> score = YatzyRules.fives(this);
-            case SIXES -> score = YatzyRules.sixes(this);
+            case CHANCE -> score = YatzyRules.sumByDiceValue(this, category.score, false);
+            case YATZY -> score = YatzyRules.yatzy(this, category.score);
+            case ONES, TWOS, THREES, FOURS, FIVES, SIXES ->
+                    score = YatzyRules.sumByDiceValue(this, category.score, true);
             case PAIR -> score = YatzyRules.pair(this);
             case TWO_PAIRS -> score = YatzyRules.twoPair(this);
-            case THREE_OF_A_KIND -> score = YatzyRules.threeOfAKind(this);
-            case FOUR_OF_A_KIND -> score = YatzyRules.fourOfAKind(this);
-            case SMALL_STRAIGHT -> score = YatzyRules.smallStraight(this);
-            case LARGE_STRAIGHT -> score = YatzyRules.largeStraight(this);
+            case THREE_OF_A_KIND, FOUR_OF_A_KIND -> score = YatzyRules.scoreKindNumber(this, category.score);
+            case SMALL_STRAIGHT -> score = YatzyRules.scoreStraight(this, category.score, 1);
+            case LARGE_STRAIGHT -> score = YatzyRules.scoreStraight(this, category.score, 6);
             case FULL_HOUSE -> score = YatzyRules.fullHouse(this);
-            default -> score = -1;
         }
         return score;
     }
