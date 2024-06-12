@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class YatzyUtilsTest {
 
-    public static Dice[] getDices(int[] values) {
+    public static Dice[] initDices(int[] values) {
         return Arrays.stream(values)
                 .mapToObj(Dice::new)
                 .toArray(Dice[]::new);
