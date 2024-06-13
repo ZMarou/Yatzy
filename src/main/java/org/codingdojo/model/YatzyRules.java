@@ -1,7 +1,10 @@
 package org.codingdojo.model;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class YatzyRules {
 
@@ -11,15 +14,15 @@ public final class YatzyRules {
     private static final Predicate<Integer> equalToOne = i -> i == 1;
 
     public static int yatzy(Roll roll, int score) {
-        Dice dice1 = roll.dices()[0];
+        int dice1 = roll.dices()[0];
         return Arrays.stream(roll.dices())
-                .allMatch(dice -> dice.equals(dice1)) ? score : 0;
+                .allMatch(dice -> dice == dice1) ? score : 0;
     }
 
     public static int sumByDiceValue(Roll roll, int diceValue, boolean enableFilter) {
         return Arrays.stream(roll.dices())
-                .filter(dice -> !enableFilter || dice.isSameValue(diceValue))
-                .reduce(0, (acc, el) -> acc + el.value(), Integer::sum);
+                .filter(dice -> !enableFilter || dice == diceValue)
+                .reduce(0, Integer::sum);
     }
 
     public static int pair(Roll roll) {
@@ -76,12 +79,9 @@ public final class YatzyRules {
     }
 
     private static Map<Integer, Integer> calculateFrequency(Roll roll) {
-        Map<Integer, Integer> map = new HashMap<>();
-        List<Dice> dices = Arrays.stream(roll.dices()).toList();
-        for (int i = 0; i < dices.size(); i++) {
-            map.putIfAbsent(dices.get(i).value(), Collections.frequency(dices, dices.get(i)));
-        }
-        return map;
+        return Arrays.stream(roll.dices())
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(e -> 1)));
     }
 }
 

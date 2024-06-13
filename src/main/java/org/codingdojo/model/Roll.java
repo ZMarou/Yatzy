@@ -1,14 +1,20 @@
 package org.codingdojo.model;
 
+import org.codingdojo.exception.InvalidDiceValueException;
 import org.codingdojo.exception.InvalidNumberDicePerRollException;
+
+import java.util.Arrays;
 
 import static org.codingdojo.model.Constants.NUMBER_OF_DICES;
 
-public record Roll(Dice[] dices) {
+public record Roll(int[] dices) {
 
     public Roll {
-        if (dices == null || dices.length != NUMBER_OF_DICES) {
+        if (dices.length != NUMBER_OF_DICES) {
             throw new InvalidNumberDicePerRollException();
+        }
+        if (!Arrays.stream(dices).allMatch(dice -> dice >= 1 && dice <= 6)) {
+            throw new InvalidDiceValueException();
         }
     }
 

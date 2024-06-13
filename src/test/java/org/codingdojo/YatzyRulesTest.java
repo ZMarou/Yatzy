@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.codingdojo.YatzyUtilsTest.initDices;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class YatzyRulesTest {
@@ -16,7 +15,7 @@ public class YatzyRulesTest {
     @ParameterizedTest(name = "For dices ({0}) and category ({1}) => expected {2}")
     @MethodSource("defineARoll")
     public void should_return_expected_value_when_choose_selected_category_given_dices(int[] dices, CategoryEnum category, int expected) {
-        Roll roll = new Roll(initDices(dices));
+        Roll roll = new Roll(dices);
         assertEquals(expected, roll.score(category));
     }
 
@@ -52,9 +51,7 @@ public class YatzyRulesTest {
                 Arguments.of(new int[]{2, 3, 4, 5, 6}, CategoryEnum.LARGE_STRAIGHT, 20),
                 Arguments.of(new int[]{1, 1, 2, 2, 2}, CategoryEnum.FULL_HOUSE, 8),
                 Arguments.of(new int[]{2, 2, 3, 3, 4}, CategoryEnum.FULL_HOUSE, 0),
-                Arguments.of(new int[]{4, 4, 4, 4, 4}, CategoryEnum.FULL_HOUSE, 0)
-        );
+                Arguments.of(new int[]{4, 4, 4, 4, 4}, CategoryEnum.FULL_HOUSE, 0));
     }
-
 
 }
